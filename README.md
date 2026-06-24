@@ -10,6 +10,7 @@ Built with React + Vite + TypeScript and [React Flow](https://reactflow.dev) (`@
 - **Reposition** — drag nodes anywhere.
 - **Connect** — drag from a node's handle to another to define order.
 - **JSON export** — export the current workflow (nodes and edges) as a JSON file
+- **Persistence** — the workflow is saved to localStorage and restored on reload, with a Reset button to clear it
 
 ## Getting started
 

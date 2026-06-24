@@ -94,7 +94,7 @@ export default function App() {
       <div className="toolbar">
         <button onClick={addStep}>+ Add step</button>
         <button onClick={exportWorkflow}>Export</button>
-        <button onClick={resetWorkflow}>Reset</button>
+        <button onClick={resetWorkflow}>Reset workflow</button>
       </div>
       <ReactFlow
         nodes={nodes}
