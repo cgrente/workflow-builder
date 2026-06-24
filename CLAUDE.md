@@ -1,0 +1,1 @@
+Stop adding the "Co-Authored-By: Claude" trailer to commit messages from now on.

@@ -39,6 +39,17 @@ export default function App() {
     [],
   )
 
+  const exportWorkflow = useCallback(() => {
+    const json = JSON.stringify({ nodes, edges }, null, 2)
+    const blob = new Blob([json], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'workflow.json'
+    link.click()
+    URL.revokeObjectURL(url)
+  }, [nodes, edges])
+
   const addStep = useCallback(() => {
     setNodes((nds) => {
       const nextNumber = nds.length + 1
@@ -55,6 +66,7 @@ export default function App() {
     <div style={{ width: '100vw', height: '100vh' }}>
       <div className="toolbar">
         <button onClick={addStep}>+ Add step</button>
+        <button onClick={exportWorkflow}>Export</button>
       </div>
       <ReactFlow
         nodes={nodes}
