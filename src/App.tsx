@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import {
   ReactFlow,
   Background,
@@ -14,15 +14,36 @@ import {
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 
+const STORAGE_KEY = 'workflow'
+
 const initialNodes: Node[] = [
   { id: '1', position: { x: 250, y: 100 }, data: { label: 'Step 1' } },
 ]
 
 const initialEdges: Edge[] = []
 
+function loadWorkflow(): { nodes: Node[]; edges: Edge[] } {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (saved) {
+      const parsed = JSON.parse(saved)
+      if (Array.isArray(parsed.nodes) && Array.isArray(parsed.edges)) {
+        return { nodes: parsed.nodes, edges: parsed.edges }
+      }
+    }
+  } catch {
+    // ignore malformed storage and fall back to defaults
+  }
+  return { nodes: initialNodes, edges: initialEdges }
+}
+
 export default function App() {
-  const [nodes, setNodes] = useState<Node[]>(initialNodes)
-  const [edges, setEdges] = useState<Edge[]>(initialEdges)
+  const [nodes, setNodes] = useState<Node[]>(() => loadWorkflow().nodes)
+  const [edges, setEdges] = useState<Edge[]>(() => loadWorkflow().edges)
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ nodes, edges }))
+  }, [nodes, edges])
 
   const onNodesChange = useCallback(
     (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
@@ -50,6 +71,12 @@ export default function App() {
     URL.revokeObjectURL(url)
   }, [nodes, edges])
 
+  const resetWorkflow = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEY)
+    setNodes(initialNodes)
+    setEdges(initialEdges)
+  }, [])
+
   const addStep = useCallback(() => {
     setNodes((nds) => {
       const nextNumber = nds.length + 1
@@ -67,6 +94,7 @@ export default function App() {
       <div className="toolbar">
         <button onClick={addStep}>+ Add step</button>
         <button onClick={exportWorkflow}>Export</button>
+        <button onClick={resetWorkflow}>Reset</button>
       </div>
       <ReactFlow
         nodes={nodes}
