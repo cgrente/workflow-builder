@@ -9,6 +9,7 @@ Built with React + Vite + TypeScript and [React Flow](https://reactflow.dev) (`@
 - **Add step** — click the *+ Add step* button to drop a new node on the canvas.
 - **Reposition** — drag nodes anywhere.
 - **Connect** — drag from a node's handle to another to define order.
+- **JSON export** — export the current workflow (nodes and edges) as a JSON file
 
 ## Getting started
 
